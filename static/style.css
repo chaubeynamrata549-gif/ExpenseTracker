@@ -1,0 +1,69 @@
+body {
+    background: black !important;
+    color: white !important;
+}
+/* Top Controls */
+
+.top-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.zoom-controls button {
+    min-width: 40px;
+}
+
+#zoomLevel {
+    font-weight: bold;
+}
+
+
+/* Light Mode */
+
+body.light-mode {
+    background: #f4f4f4;
+    color: #111111;
+}
+
+body.light-mode .card {
+    background: #ffffff;
+    color: #111111;
+    border-color: #dddddd;
+}
+
+body.light-mode input,
+body.light-mode select {
+    background: #ffffff;
+    color: #111111;
+    border-color: #cccccc;
+}
+
+body.light-mode th {
+    background: #eeeeee;
+    color: #111111;
+}
+
+body.light-mode td {
+    border-color: #dddddd;
+}
+
+body.light-mode tr:hover {
+    background: #f1f1f1;
+}
+
+body.light-mode a {
+    color: #111111;
+}
+
+body.light-mode .footer {
+    color: #111111;
+}

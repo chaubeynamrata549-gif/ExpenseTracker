@@ -1,0 +1,352 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #f5f6f8;
+    color: #222;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+/* TOP CONTROLS */
+
+.top-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.top-controls button {
+    padding: 7px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    color: #222;
+    cursor: pointer;
+}
+
+#zoomValue {
+    font-size: 14px;
+}
+
+/* HEADER */
+
+header {
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 32px;
+    color: #222;
+}
+
+header p {
+    color: #666;
+}
+
+/* SUMMARY */
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.summary-card h3 {
+    margin-top: 0;
+    color: #555;
+}
+
+.big-value {
+    font-size: 25px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* CARDS */
+
+.card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 21px;
+    color: #333;
+}
+
+/* FORM */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: white;
+    color: #222;
+    font-size: 15px;
+}
+
+.main-btn {
+    margin-top: 18px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    background: #4a90e2;
+    color: white;
+    cursor: pointer;
+}
+
+.main-btn:hover {
+    background: #357abd;
+}
+
+/* FILTER */
+
+.filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-controls input,
+.filter-controls select {
+    width: auto;
+    min-width: 200px;
+}
+
+.filter-controls button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    background: #4a90e2;
+    color: white;
+    cursor: pointer;
+}
+
+.clear-btn {
+    padding: 9px 13px;
+    border-radius: 6px;
+    background: #eee;
+    color: #333;
+    text-decoration: none;
+}
+
+/* TABLE */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th {
+    background: #e9edf2;
+    color: #333;
+}
+
+th,
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+tr:hover {
+    background: #f7f8fa;
+}
+
+.edit-btn,
+.delete-btn {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+}
+
+.edit-btn {
+    background: #f0ad4e;
+}
+
+.delete-btn {
+    background: #d9534f;
+}
+
+.empty {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+/* CHARTS */
+
+.charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.chart-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 380px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.chart-card h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.chart-card canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #666;
+}
+
+/* DARK MODE */
+
+.dark-mode {
+    background: #17202a;
+    color: #eee;
+}
+
+.dark-mode header h1,
+.dark-mode .card h2,
+.dark-mode .summary-card h3,
+.dark-mode .big-value {
+    color: #eee;
+}
+
+.dark-mode header p,
+.dark-mode footer {
+    color: #bbb;
+}
+
+.dark-mode .card,
+.dark-mode .summary-card,
+.dark-mode .chart-card {
+    background: #202b38;
+    border-color: #344454;
+}
+
+.dark-mode input,
+.dark-mode select {
+    background: #283747;
+    color: white;
+    border-color: #526273;
+}
+
+.dark-mode table {
+    background: #202b38;
+    color: white;
+}
+
+.dark-mode th {
+    background: #2c3e50;
+    color: white;
+}
+
+.dark-mode td {
+    border-color: #344454;
+}
+
+.dark-mode tr:hover {
+    background: #263544;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .charts {
+        grid-template-columns: 1fr;
+    }
+
+    .top-controls {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 500px) {
+
+    header h1 {
+        font-size: 25px;
+    }
+
+    .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-controls input,
+    .filter-controls select {
+        width: 100%;
+    }
+}

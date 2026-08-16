@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Expense Tracker</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+            transition: 0.3s;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+            color: #222;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-top: 6px;
+        }
+
+        button {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .mode-btn {
+            background: #222;
+            color: white;
+        }
+
+        .zoom-box {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .zoom-box button {
+            background: #ddd;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        .amount {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .section {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            margin-top: 0;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        input,
+        select {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            width: 100%;
+            background: white;
+        }
+
+        .add-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .filter-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 10px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-form input {
+            flex: 1;
+        }
+
+        .filter-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .clear-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f0f2f5;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .chart-box {
+            min-height: 350px;
+        }
+
+        canvas {
+            max-height: 350px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+        /* DARK MODE */
+
+        body.dark {
+            background: #111827;
+            color: #f3f4f6;
+        }
+
+        body.dark h1,
+        body.dark .card h3,
+        body.dark .subtitle {
+            color: #f3f4f6;
+        }
+
+        body.dark .card,
+        body.dark .section {
+            background: #1f2937;
+            color: #f3f4f6;
+        }
+
+        body.dark th {
+            background: #374151;
+        }
+
+        body.dark td {
+            border-color: #374151;
+        }
+
+        body.dark input,
+        body.dark select {
+            background: #374151;
+            color: white;
+            border-color: #4b5563;
+        }
+
+        body.dark .zoom-box button {
+            background: #374151;
+            color: white;
+        }
+
+        @media (max-width: 800px) {
+
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+
+            form,
+            .filter-form {
+                grid-template-columns: 1fr;
+            }
+
+            .charts {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div>
+            <h1>💰 Expense Tracker</h1>
+
+            <div class="subtitle">
+                Manage your expenses easily
+            </div>
+        </div>
+
+        <div class="zoom-box">
+
+            <button onclick="changeZoom(-10)">−</button>
+
+            <span id="zoomValue">100%</span>
+
+            <button onclick="changeZoom(10)">+</button>
+
+            <button class="mode-btn"
+                    onclick="toggleMode()"
+                    id="modeButton">
+                🌙 Dark Mode
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="card-container">
+
+        <div class="card">
+
+            <h3>💰 Total Expenses</h3>
+
+            <div class="amount">
+                ₹{{ "%.2f"|format(total) }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>🧾 Number of Expenses</h3>
+
+            <div class="amount">
+                {{ count }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>📊 Average Expense</h3>
+
+            <div class="amount">
+                ₹{{ "%.2f"|format(average) }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD EXPENSE -->
+
+    <div class="section">
+
+        <h2>➕ Add Expense</h2>
+
+        <form action="/add" method="POST">
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Expense Name e.g. Books"
+                required
+            >
+
+            <input
+                type="number"
+                name="amount"
+                placeholder="Amount e.g. 500"
+                step="0.01"
+                required
+            >
+
+            <select name="category" required>
+
+                <option value="Food">🍔 Food</option>
+                <option value="Shopping">🛍️ Shopping</option>
+                <option value="Transport">🚗 Transport</option>
+                <option value="Utilities">💡 Utilities</option>
+                <option value="Education">📚 Education</option>
+                <option value="Other">📦 Other</option>
+
+            </select>
+
+            <input
+                type="date"
+                name="date"
+                required
+            >
+
+            <button class="add-btn"
+                    type="submit">
+                ➕ Add Expense
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="section">
+
+        <h2>🔎 Search Expenses</h2>
+
+        <div class="search-form">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search expense name..."
+                onkeyup="searchExpenses()"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- EXPENSE TABLE -->
+
+    <div class="section">
+
+        <h2>📋 My Expenses</h2>
+
+        {% if expenses %}
+
+        <table id="expenseTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+                    <th>Expense Name</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for expense in expenses %}
+
+                <tr>
+
+                    <td>
+                        {{ expense["date"] }}
+                    </td>
+
+                    <td>
+                        {{ expense["name"] }}
+                    </td>
+
+                    <td>
+                        {{ expense["category"] }}
+                    </td>
+
+                    <td>
+                        ₹{{ "%.2f"|format(expense["amount"]) }}
+                    </td>
+
+                    <td>
+
+                        <a href="/edit/{{ expense['id'] }}">
+                            <button class="edit-btn">
+                                Edit
+                            </button>
+                        </a>
+
+                        <a href="/delete/{{ expense['id'] }}"
+                           onclick="return confirm('Delete this expense?')">
+
+                            <button class="delete-btn">
+                                Delete
+                            </button>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+            <p>No expenses added yet.</p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- CHARTS -->
+
+    <div class="charts">
+
+        <div class="section chart-box">
+
+            <h2>📊 Expenses by Category</h2>
+
+            <canvas id="categoryChart"></canvas>
+
+        </div>
+
+
+        <div class="section chart-box">
+
+            <h2>📈 Spending Overview</h2>
+
+            <canvas id="expenseChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        💰 Thank You for Using Expense Tracker!
+
+        <br>
+
+        Manage your expenses smartly and easily ❤️
+
+        <br><br>
+
+        © 2026 Expense Tracker
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* DARK MODE */
+
+    function toggleMode() {
+
+        document.body.classList.toggle("dark");
+
+        const button = document.getElementById("modeButton");
+
+        if (document.body.classList.contains("dark")) {
+
+            button.innerHTML = "☀️ Light Mode";
+
+        } else {
+
+            button.innerHTML = "🌙 Dark Mode";
+
+        }
+
+    }
+
+
+    /* ZOOM */
+
+    let zoom = 100;
+
+    function changeZoom(value) {
+
+        zoom += value;
+
+        if (zoom < 50) {
+            zoom = 50;
+        }
+
+        if (zoom > 150) {
+            zoom = 150;
+        }
+
+        document.body.style.zoom = zoom + "%";
+
+        document.getElementById("zoomValue").innerText =
+            zoom + "%";
+    }
+
+
+    /* SEARCH */
+
+    function searchExpenses() {
+
+        let input =
+            document.getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+        let rows =
+            document.querySelectorAll(
+                "#expenseTable tbody tr"
+            );
+
+        rows.forEach(function(row) {
+
+            let text =
+                row.innerText.toLowerCase();
+
+            if (text.includes(input)) {
+
+                row.style.display = "";
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        });
+
+    }
+
+
+    /* CATEGORY DATA */
+
+    const categoryData =
+        {{ category_totals | tojson }};
+
+
+    const categoryLabels =
+        Object.keys(categoryData);
+
+
+    const categoryValues =
+        Object.values(categoryData);
+
+
+    /* PIE CHART */
+
+    new Chart(
+        document.getElementById("categoryChart"),
+        {
+
+            type: "pie",
+
+            data: {
+
+                labels: categoryLabels,
+
+                datasets: [{
+
+                    data: categoryValues
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        }
+
+    );
+
+
+    /* BAR CHART */
+
+    const expenseNames = [
+
+        {% for expense in expenses %}
+            "{{ expense['name']|replace('"', '\\"') }}",
+        {% endfor %}
+
+    ];
+
+
+    const expenseAmounts = [
+
+        {% for expense in expenses %}
+            {{ expense['amount'] }},
+        {% endfor %}
+
+    ];
+
+
+    new Chart(
+
+        document.getElementById("expenseChart"),
+
+        {
+
+            type: "bar",
+
+            data: {
+
+                labels: expenseNames,
+
+                datasets: [{
+
+                    label: "Amount",
+
+                    data: expenseAmounts
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        }
+
+    );
+
+</script>
+
+
+</body>
+
+</html>
