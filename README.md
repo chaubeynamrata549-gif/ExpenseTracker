@@ -17,6 +17,7 @@ Expense Tracker is a web-based application developed using Python and Flask. It 
 - Simple and user-friendly interface
 - Store expense data in a database
 
+
 ## Project Structure
 - `app.py` – Main Flask application
 - `templates/` – HTML files
@@ -26,4 +27,4 @@ Expense Tracker is a web-based application developed using Python and Flask. It 
 
 ## Purpose
 This project was developed as a mini project to learn Python, Flask, web development, and database management.
-
+Expense Tracker
